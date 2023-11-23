@@ -1,45 +1,46 @@
 package Chetoos.demo.Controller;
 
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import Chetoos.demo.Model.PaisRepo;
-import Chetoos.demo.Model.pais;
-
+import Chetoos.demo.Model.FactService;
+import Chetoos.demo.Model.Factura;
 @RestController
 @ComponentScan("Chetoos.demo.controller")
+@RequestMapping("/items")
 public class MainController {
 
-    private PaisRepo paisRepo;
+    @Autowired
+    private FactService factService;
 
-    @GetMapping("/")
-    public String hello(@RequestParam(value = "name", defaultValue = "World") String name) {
-      return String.format("HOME PAGE XD %s!", name);
+    @GetMapping
+    public ResponseEntity<List<Factura>> getAllFacturas(){
+        return new ResponseEntity<List<Factura>>(factService.allFacturas(), HttpStatus.OK);
     }
 
-    @PostMapping(path = "/add")// Map ONLY POST Requests
-    public @ResponseBody String addPais(@RequestParam String Nombre){
-      // @ResponseBody means the returned String is the response, not a view name
-    // @RequestParam means it is a parameter from the GET or POST request
-
-      pais p = new pais();
-      p.setNOMBRE_PAIS(Nombre);
-      p.setESTADO_PAIS('d');
-      paisRepo.save(p);
-
-      return "Saved";
-
+    @GetMapping("/{id}")
+    public ResponseEntity<Optional<Factura>> getSingleFactura(@PathVariable Integer id){
+      return new ResponseEntity<Optional<Factura>>(factService.singleFactura(id), HttpStatus.OK);
     }
 
-    @GetMapping(path = "/all")
-    public @ResponseBody Iterable<pais> getAllPais(){
-      //This returns a JSON or XML with the users
-      return paisRepo.findAll();
+    public ResponseEntity<String> createFactura(@RequestBody Factura factura) {
+        factService.createFactura(factura);
+        return new ResponseEntity<>("Factura creada exitosamente", HttpStatus.CREATED);
     }
+
 
 }
 
