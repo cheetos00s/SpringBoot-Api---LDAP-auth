@@ -6,6 +6,7 @@
 ben
 //password
 benspassword
+benspassword
 
 //DATABASE TUTORIAL https://spring.io/guides/gs/accessing-data-mysql/
 

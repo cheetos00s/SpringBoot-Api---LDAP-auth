@@ -26,7 +26,7 @@ public class MainController {
     @Autowired
     private FactService factService;
 
-    @GetMapping
+    @GetMapping("/facturas")
     public ResponseEntity<List<Factura>> getAllFacturas(){
         return new ResponseEntity<List<Factura>>(factService.allFacturas(), HttpStatus.OK);
     }
