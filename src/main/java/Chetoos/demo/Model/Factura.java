@@ -19,7 +19,7 @@ public class Factura {
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Integer idFactura;
     private Date fechaFactura;
-    private Integer idTipoFac;
+    private Integer idTipoFac = 0;
     private Integer clienteFactura;
     private Integer totalFactura = 0;
     private Integer descuentoFactura = 0;

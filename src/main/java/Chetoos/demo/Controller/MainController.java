@@ -1,5 +1,7 @@
 package Chetoos.demo.Controller;
 
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,9 +38,32 @@ public class MainController {
       return new ResponseEntity<Optional<Factura>>(factService.singleFactura(id), HttpStatus.OK);
     }
 
-    public ResponseEntity<String> createFactura(@RequestBody Factura factura) {
-        factService.createFactura(factura);
-        return new ResponseEntity<>("Factura creada exitosamente", HttpStatus.CREATED);
+    @PostMapping("/add")
+    public ResponseEntity<String> addNewFactura(@RequestBody Factura facturaRequest) {
+        // facturaRequest es un objeto Java que mapea la estructura del JSON
+        // Puedes acceder a sus propiedades para obtener los datos de la factura
+        try{
+            Factura nuevaFactura = new Factura();
+            System.out.println(facturaRequest + "                             12");
+            nuevaFactura.setFechaFactura(facturaRequest.getFechaFactura());
+            System.out.println(nuevaFactura + "                               34");
+            nuevaFactura.setIdTipoFac(facturaRequest.getIdTipoFac());
+            nuevaFactura.setClienteFactura(facturaRequest.getClienteFactura());
+            nuevaFactura.setTotalFactura(facturaRequest.getTotalFactura());
+            nuevaFactura.setDescuentoFactura(facturaRequest.getDescuentoFactura());
+            nuevaFactura.setIvaFactura(facturaRequest.getIvaFactura());
+            nuevaFactura.setSubtotalFactura(facturaRequest.getSubtotalFactura());
+            nuevaFactura.setSaldoFactura(facturaRequest.getSaldoFactura());
+            nuevaFactura.setEstadoFactura(facturaRequest.getEstadoFactura());
+            System.out.println(nuevaFactura + "                                45");
+            // Guarda la nueva factura en el repositorio
+            factService.createFactura(nuevaFactura);
+        }catch(Error e){
+            return new ResponseEntity<>( "Puta mierda" , HttpStatus.BAD_REQUEST);
+        }
+        
+    
+        return new ResponseEntity<>("Factura guardada exitosamente", HttpStatus.CREATED);
     }
 
 
